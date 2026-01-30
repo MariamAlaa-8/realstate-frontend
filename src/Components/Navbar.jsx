@@ -17,10 +17,10 @@ export default function Navbar() {
                     
            
         </div>
-        <div className="flex items-center gap-0 text-xl font-bold">
-  النظام العقاري الذكي
-  <img  src={Image}  alt="لوجو النظام العقاري الذكي"  className="w-20 h-19 object-contain" />
-</div>
+        <Link to="/" className="flex items-center gap-0 text-xl font-bold no-underline white-gray-900 ">
+        النظام العقاري الذكي
+        <img src={Image} alt="لوجو النظام العقاري الذكي" className="w-20 h-19 object-contain" />
+      </Link>
 
       
       </nav>
