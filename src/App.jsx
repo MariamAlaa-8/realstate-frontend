@@ -17,6 +17,7 @@ import OptionalWill from './Pages/OptionalWill'
 import Verification from './Pages/Verification'
 import RealEstate from './Pages/RealEstate'
 import PaymentPage from './Pages/PaymentPage'
+import ForgotPassword from './Pages/ForgotPassword'
 
 
 const router = createBrowserRouter([
@@ -34,6 +35,7 @@ const router = createBrowserRouter([
           { path: 'login/verification', element: <Verification/>},
            { path: 'realEstate', element: <RealEstate/>},
             { path: 'paymentPage', element: <PaymentPage/>},
+       { path: 'forgotPassword', element: <ForgotPassword/>},
 
     ]
   },
