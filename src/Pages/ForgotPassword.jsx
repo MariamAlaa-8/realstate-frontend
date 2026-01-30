@@ -204,9 +204,7 @@ export default function ForgotPassword() {
                             <span className="absolute right-3 top-1/2 -translate-y-1/2 text-gray-400">
                                 🔑
                             </span>
-                            <span className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-400 cursor-pointer">
-                                👁️
-                            </span>
+                           
                         </div>
                         {errors.password && (
                             <p className="text-red-500 text-sm mb-4">{errors.password}</p>
@@ -228,9 +226,7 @@ export default function ForgotPassword() {
                             <span className="absolute right-3 top-1/2 -translate-y-1/2 text-gray-400">
                                 🔑
                             </span>
-                            <span className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-400 cursor-pointer">
-                                👁️
-                            </span>
+                           
                         </div>
                         {errors.confirmPassword && (
                             <p className="text-red-500 text-sm mb-6">{errors.confirmPassword}</p>
@@ -267,4 +263,5 @@ export default function ForgotPassword() {
             </div>
         </div>
     )
+
 }
