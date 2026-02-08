@@ -17,47 +17,47 @@ export default function ContractForm() {
 
        
           <div>
-            <label className="block mb-1 text-sm font-medium">الاسم</label>
-            <input type="text" className="w-full border rounded-md px-3 py-2 focus:outline-none focus:ring-2 focus:ring-blue-600"/>
+            <label className="block text-lg mb-1">الاسم</label>
+            <input type="text" className="w-full border rounded-lg py-3 px-3 outline-none focus:border-blue-800"/>
           </div>
 
         
           <div>
-            <label className="block mb-1 text-sm font-medium">الرقم القومي</label>
-            <input type="text"className="w-full border rounded-md px-3 py-2 focus:outline-none focus:ring-2 focus:ring-blue-600" />
+            <label className="block text-lg mb-1">الرقم القومي</label>
+            <input type="text"className="w-full border rounded-lg py-3 px-3 outline-none focus:border-blue-800" />
           </div>
 
          
           <div>
-            <label className="block mb-1 text-sm font-medium">رقم الهاتف</label>
-            <input type="text" className="w-full border rounded-md px-3 py-2 focus:outline-none focus:ring-2 focus:ring-blue-600"/>
+            <label className="block text-lg mb-1">رقم الهاتف</label>
+            <input type="text" className="w-full border rounded-lg py-3 px-3 outline-none focus:border-blue-800"/>
           </div>
 
         
           <div>
-            <label className="block mb-1 text-sm font-medium">رقم العقار</label>
-            <input type="text" className="w-full border rounded-md px-3 py-2 focus:outline-none focus:ring-2 focus:ring-blue-600" />
+            <label className="block text-lg mb-1">رقم العقار</label>
+            <input type="text" className="w-full border rounded-lg py-3 px-3 outline-none focus:border-blue-800" />
           </div>
 
         
           <div>
-            <label className="block mb-1 text-sm font-medium">نسبة الملكية (%)</label>
-            <input type="number" className="w-full border rounded-md px-3 py-2 focus:outline-none focus:ring-2 focus:ring-blue-600" />
+            <label className="block text-lg mb-1">نسبة الملكية (%)</label>
+            <input type="number" className="w-full border rounded-lg py-3 px-3 outline-none focus:border-blue-800" />
           </div>
 
          
           
          
           <div>
-            <label className="block mb-1 text-sm font-medium">العنوان</label>
-            <input type="text" className="w-full border rounded-md px-3 py-2 focus:outline-none focus:ring-2 focus:ring-blue-600"/>
+            <label className="block text-lg mb-1">العنوان</label>
+            <input type="text" className="w-full border rounded-lg py-3 px-3 outline-none focus:border-blue-800"/>
           </div>
 
       
           
           <div>
-            <label className="block mb-1 text-sm font-medium">المحافظة</label>
-            <select className="w-full border rounded-md px-3 py-2 bg-white">
+            <label className="block text-lg mb-1">المحافظة</label>
+            <select className="w-full border rounded-lg py-3 px-3 outline-none bg-white">
               <option>اختر المحافظة</option>
               <option>القاهرة</option>
               <option>الجيزة</option>
@@ -91,8 +91,8 @@ export default function ContractForm() {
 
           
            <div>
-            <label className="block mb-1 text-sm font-medium">نوع العقار</label>
-            <select value={propertyType}  onChange={(e) => setPropertyType(e.target.value)} className="w-full border rounded-md px-3 py-2 bg-white " >
+            <label className="block text-lg mb-1">نوع العقار</label>
+            <select value={propertyType}  onChange={(e) => setPropertyType(e.target.value)} className="w-full border rounded-lg py-3 px-3 outline-none  bg-white " >
               <option value="">اختر نوع العقار</option>
 
               <optgroup label="سكني">
@@ -130,20 +130,20 @@ export default function ContractForm() {
 
           {["شقة","دوبلكس","ستوديو","بنتهاوس","مكتب إداري","عيادة"].includes(propertyType) && (
             <div>
-              <label className="block mb-1 text-sm font-medium">رقم الطابق</label>
-              <input className="w-full border rounded-md px-3 py-2 focus:outline-none focus:ring-2 focus:ring-blue-600" />
+              <label className="block text-lg mb-1">رقم الطابق</label>
+              <input className="w-full border rounded-lg py-3 px-3 outline-none focus:border-blue-800" />
             </div>
           )}
 
           <div>
-            <label className="block mb-1 text-sm font-medium"> السعر(جنيه)</label>
-            <input type="number" className="w-full border rounded-md px-3 py-2 focus:outline-none focus:ring-2 focus:ring-blue-600"/>
+            <label className="block text-lg mb-1"> السعر(جنيه)</label>
+            <input type="number" className="w-full border rounded-lg py-3 px-3 outline-none focus:border-blue-800"/>
           </div>
 
      
           <div>
-            <label className="block mb-1 text-sm font-medium"> المساحة(م²)</label>
-            <input type="number" className="w-full border rounded-md px-3 py-2 focus:outline-none focus:ring-2 focus:ring-blue-600"/>
+            <label className="block text-lg mb-1"> المساحة(م²)</label>
+            <input type="number" className="w-full border rounded-lg py-3 px-3 outline-none focus:border-blue-800"/>
           </div>
 
         </form>
