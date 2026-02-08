@@ -57,14 +57,44 @@ export default function Requestrealestate() {
             <input className="w-full border rounded-lg py-3 px-3 outline-none focus:border-blue-800" />
           </div>
 
-          <div>
-            <label className="block text-lg  mb-1">المحافظة</label>
-            <input className="w-full border rounded-lg py-3 px-3 outline-none focus:border-blue-800" />
-          </div>
+       <div>
+  <label className="block text-lg mb-1">المحافظة</label>
+  <select className="w-full border rounded-lg py-3 px-3 outline-none focus:border-blue-800 text-gray-900">
+    <option>اختر المحافظة</option>
+
+    <option>القاهرة</option>
+    <option>الجيزة</option>
+    <option>الإسكندرية</option>
+    <option>الدقهلية</option>
+    <option>البحر الأحمر</option>
+    <option>البحيرة</option>
+    <option>الفيوم</option>
+    <option>الغربية</option>
+    <option>الإسماعيلية</option>
+    <option>المنوفية</option>
+    <option>المنيا</option>
+    <option>القليوبية</option>
+    <option>الوادي الجديد</option>
+    <option>السويس</option>
+    <option>اسوان</option>
+    <option>اسيوط</option>
+    <option>بني سويف</option>
+    <option>بورسعيد</option>
+    <option>دمياط</option>
+    <option>الشرقية</option>
+    <option>جنوب سيناء</option>
+    <option>كفر الشيخ</option>
+    <option>مطروح</option>
+    <option>الأقصر</option>
+    <option>قنا</option>
+    <option>شمال سيناء</option>
+    <option>سوهاج</option>
+  </select>
+</div>
 
           <div>
             <label className="block text-lg  mb-1">نوع العقار</label>
-            <select className="w-full border rounded-lg py-3 px-3 outline-none focus:border-blue-800 text-gray-500">
+            <select className="w-full border rounded-lg py-3 px-3 outline-none focus:border-blue-800 text-gray-900">
               <option>اختر نوع العقار</option>
               <option>شقة</option>
               <option>فيلا</option>
