@@ -1,5 +1,6 @@
 import React from 'react'
 import { createBrowserRouter, RouterProvider } from 'react-router-dom'
+import { AuthProvider } from './contexts/AuthContext'
 import Main from './Layouts/Main'
 import Auth from './Layouts/Auth'
 import Home from './Pages/Home'
@@ -18,43 +19,76 @@ import Verification from './Pages/Verification'
 import RealEstate from './Pages/RealEstate'
 import PaymentPage from './Pages/PaymentPage'
 import ForgotPassword from './Pages/ForgotPassword'
-import InformationPersonal from './Pages/InformationPersonal'
-
+import ProtectedRoute from './Components/ProtectedRoute'
 
 const router = createBrowserRouter([
   {
-    path: '', element: <Main />, children: [
+    path: '',
+    element: <Main />,
+    children: [
       { index: true, element: <Home /> },
-      { path: 'profile', element: <Profile /> },
-        { path: 'services', element: <Services/> },
-      { path: 'requestrealestate', element: <Requestrealestate /> },
-      { path: 'sarchRealEstate', element: <SearchRealEstate/> },
-       { path: 'contractForm', element: <ContractForm/> },
-        { path: 'sendContract', element: <SendContract/> },
-         { path: 'secondPartyForm', element: <SecondPartyForm/>},
-         { path: 'optionalWill', element: <OptionalWill/>},
-          { path: 'login/verification', element: <Verification/>},
-           { path: 'realEstate', element: <RealEstate/>},
-            { path: 'paymentPage', element: <PaymentPage/>},
-       { path: 'forgotPassword', element: <ForgotPassword/>},
-      { path: 'informationPersonal', element: <InformationPersonal/>},
-
+      { 
+        path: 'profile', 
+        element: <ProtectedRoute><Profile /></ProtectedRoute> 
+      },
+      { 
+        path: 'services', 
+        element: <ProtectedRoute><Services /></ProtectedRoute> 
+      },
+      { 
+        path: 'requestrealestate', 
+        element: <ProtectedRoute><Requestrealestate /></ProtectedRoute> 
+      },
+      { 
+        path: 'searchRealEstate', 
+        element: <ProtectedRoute><SearchRealEstate /></ProtectedRoute> 
+      },
+      { 
+        path: 'contractForm', 
+        element: <ProtectedRoute><ContractForm /></ProtectedRoute> 
+      },
+      { 
+        path: 'sendContract', 
+        element: <ProtectedRoute><SendContract /></ProtectedRoute> 
+      },
+      { 
+        path: 'secondPartyForm', 
+        element: <ProtectedRoute><SecondPartyForm /></ProtectedRoute> 
+      },
+      { 
+        path: 'optionalWill', 
+        element: <ProtectedRoute><OptionalWill /></ProtectedRoute> 
+      },
+      { 
+        path: 'realEstate', 
+        element: <ProtectedRoute><RealEstate /></ProtectedRoute> 
+      },
+      { 
+        path: 'paymentPage', 
+        element: <ProtectedRoute><PaymentPage /></ProtectedRoute> 
+      },
+      { path: 'login/verification', element: <Verification /> },
+      { path: 'forgotPassword', element: <ForgotPassword /> },
     ]
   },
   {
-    path: '', element: <Auth />, children: [
+    path: '',
+    element: <Auth />,
+    children: [
       { path: 'register', element: <Register /> },
       { path: 'login', element: <Login /> },
     ]
   },
-   {
+  {
     path: '*',
-    element: <NotFound/>
+    element: <NotFound />
   }
 ])
 
 export default function App() {
-  return <>
-    <RouterProvider router={router} />
-  </>
+  return (
+    <AuthProvider>
+      <RouterProvider router={router} />
+    </AuthProvider>
+  )
 }
