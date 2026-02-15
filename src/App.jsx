@@ -20,6 +20,9 @@ import RealEstate from './Pages/RealEstate'
 import PaymentPage from './Pages/PaymentPage'
 import ForgotPassword from './Pages/ForgotPassword'
 import ProtectedRoute from './Components/ProtectedRoute'
+import InformationPersonal from './Pages/InformationPersonal'
+
+
 
 const router = createBrowserRouter([
   {
@@ -62,6 +65,10 @@ const router = createBrowserRouter([
       { 
         path: 'realEstate', 
         element: <ProtectedRoute><RealEstate /></ProtectedRoute> 
+      },
+      { 
+        path: 'informationPersonal', 
+        element: <ProtectedRoute><InformationPersonal/></ProtectedRoute> 
       },
       { 
         path: 'paymentPage', 
