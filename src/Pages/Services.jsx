@@ -28,7 +28,7 @@ export default function Services() {
     </p>
     
     <div className="mt-auto">
-      <Link to="/sarchRealEstate" className="bg-blue-900 text-white px-6 py-2 rounded-lg hover:bg-blue-800 transition inline-block">
+      <Link to="/searchRealEstate" className="bg-blue-900 text-white px-6 py-2 rounded-lg hover:bg-blue-800 transition inline-block">
         ابدأ البحث
       </Link>
     </div>
