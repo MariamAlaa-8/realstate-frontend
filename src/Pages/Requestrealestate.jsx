@@ -145,27 +145,8 @@ const handleSubmit = async (e) => {
     setSuccessMessage('تم إرسال طلبك بنجاح. سيتم مراجعة الطلب والموافقة عليه قريباً');
     
     setTimeout(() => {
-      setFormData({
-        fullName: '',
-        nationalId: '',
-        electricityMeter: '',
-        phoneNumber: '',
-        ownershipPercentage: '',
-        propertyNumber: '',
-        address: '',
-        governorate: '',
-        propertyType: '',
-        floor: '',
-        area: '',
-        price: '',
-        notes: ''
-      });
-      setSelectedImage(null);
-      setImagePreview(null);
-      setPropertyType('');
-      setSuccessMessage('');
-    }, 5000);
-
+  navigate('/services');
+}, 2000);
   } catch (err) {
     console.error('❌ Error:', err);
     
