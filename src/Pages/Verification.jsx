@@ -158,7 +158,7 @@ export default function Verification() {
       setSuccess('تم التحقق بنجاح! يتم توجيهك الآن...')
 
       setTimeout(() => {
-        navigate('/profile')  
+        navigate('/')  
       }, 1500)
 
     } catch (error) {
