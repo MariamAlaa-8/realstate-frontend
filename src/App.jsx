@@ -20,9 +20,10 @@ import RealEstate from './Pages/RealEstate'
 import PaymentPage from './Pages/PaymentPage'
 import ForgotPassword from './Pages/ForgotPassword'
 import ProtectedRoute from './Components/ProtectedRoute'
-import InformationPersonal from './Pages/InformationPersonal'
-
-
+import AdminRoute from './Components/AdminRoute' 
+import AdminDashboard from './Pages/AdminDashboard' 
+import Notifications from './Pages/Notifications';
+import Transactions from './Pages/Transactions';
 
 const router = createBrowserRouter([
   {
@@ -67,15 +68,20 @@ const router = createBrowserRouter([
         element: <ProtectedRoute><RealEstate /></ProtectedRoute> 
       },
       { 
-        path: 'informationPersonal', 
-        element: <ProtectedRoute><InformationPersonal/></ProtectedRoute> 
-      },
-      { 
         path: 'paymentPage', 
         element: <ProtectedRoute><PaymentPage /></ProtectedRoute> 
       },
+      { 
+        path: 'admin/dashboard', 
+        element: <AdminRoute><AdminDashboard /></AdminRoute> 
+      },
       { path: 'login/verification', element: <Verification /> },
       { path: 'forgotPassword', element: <ForgotPassword /> },
+      { 
+        path: 'transactions', 
+        element: <ProtectedRoute><Transactions /></ProtectedRoute> 
+      },
+
     ]
   },
   {
@@ -84,6 +90,10 @@ const router = createBrowserRouter([
     children: [
       { path: 'register', element: <Register /> },
       { path: 'login', element: <Login /> },
+      { 
+        path: 'notifications', 
+        element: <ProtectedRoute><Notifications /></ProtectedRoute> 
+      },
     ]
   },
   {
