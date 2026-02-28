@@ -24,6 +24,8 @@ import AdminRoute from './Components/AdminRoute'
 import AdminDashboard from './Pages/AdminDashboard' 
 import Notifications from './Pages/Notifications';
 import Transactions from './Pages/Transactions';
+import WillSetup from './Pages/WillSetup'
+import WillMethod from './Pages/WillMethod'
 
 const router = createBrowserRouter([
   {
@@ -62,6 +64,13 @@ const router = createBrowserRouter([
       { 
         path: 'optionalWill', 
         element: <ProtectedRoute><OptionalWill /></ProtectedRoute> 
+      },
+      { 
+        path: 'willSetup', 
+        element: <ProtectedRoute><WillSetup /></ProtectedRoute> 
+      }, { 
+        path: 'willMethod', 
+        element: <ProtectedRoute><WillMethod/></ProtectedRoute> 
       },
       { 
         path: 'realEstate', 
