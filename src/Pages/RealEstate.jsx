@@ -308,12 +308,7 @@
   )}
 
   
-  <button
-    onClick={() => navigate("/will-method")}
-    className="flex-1 bg-green-600 text-white py-2 rounded-xl hover:bg-green-700 transition text-sm"
-  >
-    إضافة وصية
-  </button>
+  
 </div>
                     </div>
 
@@ -325,15 +320,23 @@
             </>
             )}
             
+<div className="text-center mt-4 flex flex-col items-center gap-3">
 
-            <div className="text-center mt-4">
-            <Link 
-                to="/requestrealestate" 
-                className="inline-block w-full max-w-xs bg-blue-600 text-white py-2 rounded-lg font-medium hover:bg-blue-700 transition text-sm"
-            >
-                + إضافة عقار جديد
-            </Link>
-            </div>
+  <Link 
+    to="/requestrealestate" 
+    className="inline-block w-full max-w-xs bg-blue-600 text-white py-2 rounded-lg font-medium hover:bg-blue-700 transition text-sm"
+  >
+    + إضافة عقار جديد
+  </Link>
+
+  <Link 
+    to="/Willmethod" 
+    className="inline-block w-full max-w-xs bg-green-600 text-white py-2 rounded-lg font-medium hover:bg-green-700 transition text-sm"
+  >
+    + إضافة وصية
+  </Link>
+
+</div>
             
             
         </div>
