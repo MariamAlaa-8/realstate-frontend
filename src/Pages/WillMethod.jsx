@@ -1,12 +1,36 @@
 import { Link, useNavigate } from "react-router-dom";
-import { useState } from "react";
+import { useState, useEffect } from "react";
+import API from "../api";
 
 export default function WillMethod() {
 
   const navigate = useNavigate();
 
+  
+  const [approvedContracts, setApprovedContracts] = useState([]);
+  const [loadingContracts, setLoadingContracts] = useState(true);
 
+  useEffect(() => {
+    fetchApprovedContracts();
+  }, []);
 
+  const fetchApprovedContracts = async () => {
+    try {
+      const res = await API.get("/contracts/my-contracts");
+
+      const approved = (res.data.contracts || []).filter(
+       (c) => c.status === "approved" || c.status === "completed"
+      );
+
+      setApprovedContracts(approved);
+    } catch (err) {
+      console.log("Error fetching contracts", err);
+    } finally {
+      setLoadingContracts(false);
+    }
+  };
+
+ 
   const [heirsList, setHeirsList] = useState([
     {
       id: Date.now(),
@@ -18,10 +42,7 @@ export default function WillMethod() {
     },
   ]);
 
- 
   const [showHeirsSection, setShowHeirsSection] = useState(false);
-
-
 
   const addHeir = () => {
     setHeirsList([
@@ -52,8 +73,7 @@ export default function WillMethod() {
  
   return (
     <>
-     
-      <div className=" bg-gray-100 p-4" dir="rtl">
+      <div className="bg-gray-100 p-4" dir="rtl">
         <div className="max-w-5xl mx-auto bg-white rounded-xl shadow">
 
           <div className="bg-blue-900 text-white text-center p-5 rounded-t-xl">
@@ -65,13 +85,35 @@ export default function WillMethod() {
 
           <div className="p-5 border-b bg-gray-50">
             <h3 className="font-semibold mb-3">معلومات العقار</h3>
-            <p>🏠 النوع: شقة سكنية - 120 متر مربع</p>
-            <p>📍 الموقع: القاهرة، مدينة نصر</p>
-            <p className="text-green-600 font-bold">
-              📊 نسبة ملكيتك: %100
-            </p>
+
+            {loadingContracts ? (
+              <p>جاري تحميل العقارات...</p>
+            ) : approvedContracts.length === 0 ? (
+              <p className="text-gray-500">
+                لا يوجد عقارات مقبولة حالياً
+              </p>
+            ) : (
+              approvedContracts.map((contract) => (
+                <div key={contract._id} className="mb-3 border-b pb-2">
+
+                  <p>
+                    🏠 النوع: {contract.propertyType} - {contract.area} متر مربع
+                  </p>
+
+                  <p>
+                    📍 الموقع: {contract.governorate}، {contract.address}
+                  </p>
+
+                  <p className="text-green-600 font-bold">
+                    📊 نسبة ملكيتك: %{contract.ownershipPercentage}
+                  </p>
+
+                </div>
+              ))
+            )}
           </div>
 
+          {/* اختيار الطريقة */}
           <div className="p-6">
             <h3 className="font-semibold mb-4 text-lg">
               اختر طريقة التوزيع
@@ -90,7 +132,6 @@ export default function WillMethod() {
                 </p>
               </div>
 
-             
               <div
                 onClick={() => navigate("/willSetup")}
                 className="cursor-pointer border rounded-xl p-6 text-center hover:shadow-lg transition hover:border-blue-600"
@@ -107,159 +148,114 @@ export default function WillMethod() {
         </div>
       </div>
 
-      
+     
       {showHeirsSection && (
-  <div className="p-4" dir="rtl">
-    <h2 className="text-2xl text-blue-700 font-semibold mb-4">
-      إضافة وريث
-    </h2>
+        <div className="p-4" dir="rtl">
+          <h2 className="text-2xl text-blue-700 font-semibold mb-4">
+            إضافة وريث
+          </h2>
 
-    {heirsList.map((heir, index) => (
-      <div key={heir.id} className="mb-6 p-4 border rounded-lg">
+          {heirsList.map((heir, index) => (
+            <div key={heir.id} className="mb-6 p-4 border rounded-lg">
 
-        {heirsList.length > 1 && (
-          <div className="flex justify-between mb-3">
-            <h3 className="font-semibold">
-              وريث #{index + 1}
-            </h3>
+              {heirsList.length > 1 && (
+                <div className="flex justify-between mb-3">
+                  <h3 className="font-semibold">وريث #{index + 1}</h3>
 
-            <button
-              onClick={() => removeHeir(heir.id)}
-              className="bg-red-500 text-white px-3 py-1 rounded"
-            >
-              حذف
-            </button>
-          </div>
-        )}
+                  <button
+                    onClick={() => removeHeir(heir.id)}
+                    className="bg-red-500 text-white px-3 py-1 rounded"
+                  >
+                    حذف
+                  </button>
+                </div>
+              )}
 
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+              <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
 
-         
-          <div>
-            <label className="block mb-1 font-medium text-gray-700">الرقم القومي</label>
-            <input
-              type="text"
-              placeholder="أدخل الرقم القومي"
-              className="border p-2 rounded text-right w-full"
-              value={heir.nationalId}
-              onChange={(e) => {
-                const value = e.target.value.replace(/\D/g, "").slice(0,14);
-                updateHeir(heir.id, "nationalId", value);
-              }}
-            />
-          </div>
+                <input
+                  type="text"
+                  placeholder="الرقم القومي"
+                  className="border p-2 rounded"
+                  value={heir.nationalId}
+                  onChange={(e) =>
+                    updateHeir(
+                      heir.id,
+                      "nationalId",
+                      e.target.value.replace(/\D/g, "").slice(0, 14)
+                    )
+                  }
+                />
 
-       
-          <div>
-            <label className="block mb-1 font-medium text-gray-700">رقم الهاتف</label>
-            <input
-              type="tel"
-              placeholder="أدخل رقم الهاتف"
-              className="border p-2 rounded text-right w-full"
-              value={heir.phone}
-              onChange={(e) => {
-                const value = e.target.value.replace(/\D/g, "").slice(0,11);
-                updateHeir(heir.id, "phone", value);
-              }}
-            />
-          </div>
+                <input
+                  type="tel"
+                  placeholder="رقم الهاتف"
+                  className="border p-2 rounded"
+                  value={heir.phone}
+                  onChange={(e) =>
+                    updateHeir(
+                      heir.id,
+                      "phone",
+                      e.target.value.replace(/\D/g, "").slice(0, 11)
+                    )
+                  }
+                />
 
-          <div>
-            <label className="block mb-1 font-medium text-gray-700">الاسم الكامل</label>
-            <input
-              type="text"
-              placeholder="أدخل الاسم الكامل"
-              className="border p-2 rounded text-right w-full"
-              value={heir.fullName}
-              onChange={(e) =>
-                updateHeir(heir.id, "fullName", e.target.value)
-              }
-            />
-          </div>
+                <input
+                  type="text"
+                  placeholder="الاسم الكامل"
+                  className="border p-2 rounded"
+                  value={heir.fullName}
+                  onChange={(e) =>
+                    updateHeir(heir.id, "fullName", e.target.value)
+                  }
+                />
 
-         
-          <div>
-            <label className="block mb-1 font-medium text-gray-700">النسبة %</label>
-            <input
-              type="number"
-              min="0"
-              max="100"
-              placeholder="أدخل النسبة"
-              className="border p-2 rounded text-right w-full"
-              value={heir.percent}
-              onChange={(e) =>
-                updateHeir(heir.id, "percent", e.target.value)
-              }
-            />
-          </div>
+                <input
+                  type="number"
+                  placeholder="النسبة %"
+                  className="border p-2 rounded"
+                  value={heir.percent}
+                  onChange={(e) =>
+                    updateHeir(heir.id, "percent", e.target.value)
+                  }
+                />
 
-        
-          <div>
-            <label className="block mb-1 font-medium text-gray-700">صلة القرابة</label>
-            <select
-              className="border p-2 rounded text-right w-full"
-              value={heir.relation}
-              onChange={(e) =>
-                updateHeir(heir.id, "relation", e.target.value)
-              }
-            >
-              <option value="">اختر صلة القرابة</option>
-              <option value="ابن">ابن</option>
-              <option value="ابنة">ابنة</option>
-              <option value="زوج">زوج</option>
-              <option value="زوجة">زوجة</option>
-              <option value="أخ">أخ</option>
-            </select>
-          </div>
+                <select
+                  className="border p-2 rounded"
+                  value={heir.relation}
+                  onChange={(e) =>
+                    updateHeir(heir.id, "relation", e.target.value)
+                  }
+                >
+                  <option value="">صلة القرابة</option>
+                  <option value="ابن">ابن</option>
+                  <option value="ابنة">ابنة</option>
+                  <option value="زوج">زوج</option>
+                  <option value="زوجة">زوجة</option>
+                  <option value="أخ">أخ</option>
+                </select>
 
-         
-          <p dir="rtl" className="text-center mt-4 col-span-full">
-            <Link
-              to="/optionalWill"
-              className="text-blue-600 hover:text-blue-800 cursor-pointer font-medium"
-            >
-              هل تريد إضافة وصية اختيارية؟
-            </Link>
-          </p>
+                <p className="col-span-full text-center">
+                  <Link
+                    to="/optionalWill"
+                    className="text-blue-600 hover:text-blue-800 font-medium"
+                  >
+                    هل تريد إضافة وصية اختيارية؟
+                  </Link>
+                </p>
 
-        </div>
-      </div>
-    ))}
-
-    <button
-      onClick={addHeir}
-      className="w-full bg-green-600 text-white py-2 rounded hover:bg-green-700"
-    >
-      + إضافة وريث جديد
-    </button>
-  </div>
-)}
-
-      
-      {showHeirsSection && (
-      <div className="p-4 border-t" dir="rtl">
-        <h3 className="font-semibold mb-3">قائمة الورثة</h3>
-
-        {heirsList.map((heir) => (
-          <div
-            key={heir.id}
-            className="flex justify-between border rounded-md p-3 mb-2"
-          >
-            <div>
-              <p className="font-semibold">
-                {heir.fullName || "بدون اسم"}
-              </p>
-              <p className="text-sm text-gray-500">
-                {heir.relation || "-"} — {heir.phone || "بدون رقم"}
-              </p>
+              </div>
             </div>
+          ))}
 
-            <span className="font-semibold text-blue-700">
-              %{heir.percent || 0}
-            </span>
-          </div>
-        ))}
-      </div>
+          <button
+            onClick={addHeir}
+            className="w-full bg-green-600 text-white py-2 rounded hover:bg-green-700"
+          >
+            + إضافة وريث جديد
+          </button>
+        </div>
       )}
     </>
   );
