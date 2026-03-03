@@ -75,113 +75,130 @@ export default function ContractForm() {
     }
   };
 
-  const checkExistingContract = async () => {
-    if (!contractNumber.trim()) {
-      setError('يرجى إدخال رقم العقد');
-      return;
-    }
+const checkExistingContract = async () => {
+  if (!contractNumber.trim()) {
+    setError('يرجى إدخال رقم العقد');
+    return;
+  }
 
-    setCheckingContract(true);
-    setError('');
+  setCheckingContract(true);
+  setError('');
 
-    try {
-      const response = await API.get(`/contracts/check/${contractNumber}`);
+  try {
+    const response = await API.get(`/contracts/check/${contractNumber}`);
+    console.log('🔍 Contract check response:', response.data);
+    
+    if (response.data.exists) {
+      const contract = response.data.contract;
       
-      if (response.data.exists) {
-        const contract = response.data.contract;
-        
-        if (contract.userId._id !== JSON.parse(localStorage.getItem('user')).id) {
-          setError('هذا العقد لا يتبع لك');
-          setCheckingContract(false);
-          return;
-        }
-
-       if (contract.status !== 'approved' && contract.status !== 'completed') {
-          setError('العقد غير متاح للبيع. ');
-          setCheckingContract(false);
-          return;
-        }
-
-        setFormData({
-          fullName: contract.fullName || '',
-          nationalId: contract.nationalId || '',
-          phoneNumber: contract.phoneNumber || '',
-          propertyNumber: contract.propertyNumber || '',
-          ownershipPercentage: contract.ownershipPercentage || '',
-          address: contract.address || '',
-          governorate: contract.governorate || '',
-          propertyType: contract.propertyType || '',
-          floor: contract.floor || '',
-          price: contract.price || '',
-          area: contract.area || '',
-          notes: contract.notes || ''
-        });
-        setPropertyType(contract.propertyType || '');
-
-        setSuccessMessage('✅ تم العثور على العقد بنجاح');
-        setTimeout(() => setSuccessMessage(''), 3000);
-      }
-    } catch (err) {
-      console.error('❌ Error checking contract:', err);
-      if (err.response?.status === 404) {
-        setError('لم يتم العثور على العقد. يرجى إنشاء عقد إثبات ملكية أولاً');
-      } else {
-        setError(err.response?.data?.message || 'حدث خطأ في التحقق من العقد');
-      }
-    } finally {
-      setCheckingContract(false);
-    }
-  };
-
-  const handleSubmit = async (e) => {
-    e.preventDefault();
-    setLoading(true);
-    setError('');
-    setSuccessMessage('');
-
-    const token = localStorage.getItem('token');
-    if (!token) {
-      setError('يجب تسجيل الدخول أولاً');
-      setLoading(false);
-      navigate('/login');
-      return;
-    }
-
-    try {
-      if (!contractNumber.trim()) {
-        setError('يرجى إدخال رقم العقد أولاً');
-        setLoading(false);
+      const userStr = localStorage.getItem('user');
+      const user = JSON.parse(userStr);
+      console.log('👤 Current user:', user);
+      console.log('📄 Contract userId:', contract.userId);
+      console.log('📄 Contract userId._id:', contract.userId._id);
+      console.log('📄 Contract status:', contract.status);
+      
+      const contractUserId = contract.userId._id || contract.userId;
+      const currentUserId = user.id || user._id;
+      
+      console.log('🔍 Comparing:', { contractUserId, currentUserId });
+      
+      if (contractUserId !== currentUserId) {
+        setError('هذا العقد لا يتبع لك');
+        setCheckingContract(false);
         return;
       }
 
-      const response = await API.put(`/contracts/${contractNumber}/update-for-sale`, {
-        salePrice: formData.price
-      });
-
-      setSuccessMessage('✅ تم تحديث حالة العقد وجعله متاح للبيع بنجاح');
-      
-      localStorage.setItem('currentContract', JSON.stringify(response.data.contract));
-      
-      setTimeout(() => {
-        navigate('/sendContract', { 
-          state: { 
-            contract: response.data.contract,
-            message: response.data.message 
-          } 
-        });
-      }, 1500);
-
-    } catch (err) {
-      console.error('❌ Error:', err);
-      if (err.response?.status === 404) {
-        setError('لم يتم العثور على العقد. يرجى إنشاء عقد إثبات ملكية أولاً');
-      } else {
-        setError(err.response?.data?.message || 'حدث خطأ في تحديث العقد');
+      if (contract.status !== 'approved' && contract.status !== 'completed' && contract.status !== 'for_sale') {
+        setError('العقد غير متاح للبيع. يجب أن يكون بحالة مقبول أو مكتمل');
+        setCheckingContract(false);
+        return;
       }
-    } finally {
-      setLoading(false);
+
+      setFormData({
+        fullName: contract.fullName || '',
+        nationalId: contract.nationalId || '',
+        phoneNumber: contract.phoneNumber || '',
+        propertyNumber: contract.propertyNumber || '',
+        ownershipPercentage: contract.ownershipPercentage || '',
+        address: contract.address || '',
+        governorate: contract.governorate || '',
+        propertyType: contract.propertyType || '',
+        floor: contract.floor || '',
+        price: contract.price || '',
+        area: contract.area || '',
+        notes: contract.notes || ''
+      });
+      setPropertyType(contract.propertyType || '');
+
+      setSuccessMessage('✅ تم العثور على العقد بنجاح');
+      setTimeout(() => setSuccessMessage(''), 3000);
     }
-  };
+  } catch (err) {
+    console.error('❌ Error checking contract:', err);
+    if (err.response?.status === 404) {
+      setError('لم يتم العثور على العقد. يرجى إنشاء عقد إثبات ملكية أولاً');
+    } else {
+      setError(err.response?.data?.message || 'حدث خطأ في التحقق من العقد');
+    }
+  } finally {
+    setCheckingContract(false);
+  }
+};
+
+const handleSubmit = async (e) => {
+  e.preventDefault();
+  setLoading(true);
+  setError('');
+  setSuccessMessage('');
+
+  const token = localStorage.getItem('token');
+  if (!token) {
+    setError('يجب تسجيل الدخول أولاً');
+    setLoading(false);
+    navigate('/login');
+    return;
+  }
+
+  try {
+    if (!contractNumber.trim()) {
+      setError('يرجى إدخال رقم العقد أولاً');
+      setLoading(false);
+      return;
+    }
+
+    const checkResponse = await API.get(`/contracts/check/${contractNumber}`);
+    const contract = checkResponse.data.contract;
+    const contractId = contract._id;
+
+    const response = await API.put(`/contracts/${contractId}/for-sale`, {
+      salePrice: formData.price
+    });
+
+    setSuccessMessage('✅ تم تحديث حالة العقد وجعله متاح للبيع بنجاح');
+    
+    localStorage.setItem('currentContract', JSON.stringify(response.data.contract));
+    
+    setTimeout(() => {
+      navigate('/sendContract', { 
+        state: { 
+          contract: response.data.contract,
+          message: response.data.message 
+        } 
+      });
+    }, 1500);
+
+  } catch (err) {
+    console.error('❌ Error:', err);
+    if (err.response?.status === 404) {
+      setError('لم يتم العثور على العقد. يرجى إنشاء عقد إثبات ملكية أولاً');
+    } else {
+      setError(err.response?.data?.message || 'حدث خطأ في تحديث العقد');
+    }
+  } finally {
+    setLoading(false);
+  }
+};
 
   const isFloorRequired = ["شقة", "دوبلكس", "ستوديو", "بنتهاوس", "مكتب إداري", "عيادة"].includes(propertyType);
 
@@ -471,3 +488,4 @@ export default function ContractForm() {
     </div>
   );
 }
+
