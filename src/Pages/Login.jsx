@@ -53,7 +53,9 @@ export default function Login() {
 
     } catch (error) {
       console.error('Login error:', error)
-      const message = error.response?.data?.message || 'حدث خطأ أثناء تسجيل الدخول'
+      let message = error.response?.data?.message || 'حدث خطأ أثناء تسجيل الدخول';
+  if (error.response?.status === 403)
+    {message = '⚠️ تم إيقاف هذا الحساب. لا يمكن تسجيل الدخول.';}
       setError(message)
     } finally {
       setLoading(false)
