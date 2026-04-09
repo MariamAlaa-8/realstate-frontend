@@ -1,165 +1,259 @@
-import { useState } from "react";
+// import React, { useState, useEffect } from 'react';
+// import { useNavigate } from 'react-router-dom';
+// import API from '../api';
 
-export default function OptionalWill() {
-  const [heirsList, setHeirsList] = useState([
-    {
-      id: 1,
-      name: "محمد أحمد علي",
-      phone: "01004465677",
-      percent: 40,
-      relation: "ابن",
-      nationalId: "",
-      fullName: ""
-    },
-  ]);
+// export default function OptionalWill() {
+//   const navigate = useNavigate();
+//   const [approvedContracts, setApprovedContracts] = useState([]);
+//   const [selectedContracts, setSelectedContracts] = useState([]);
+//   const [loading, setLoading] = useState(true);
+//   const [familyMembers, setFamilyMembers] = useState([]);
+//   const [selectedHeir, setSelectedHeir] = useState('');
+//   const [percent, setPercent] = useState('');
+//   const [error, setError] = useState('');
+//   const [saving, setSaving] = useState(false);
+//   const [totalInheritanceValue, setTotalInheritanceValue] = useState(0);
 
+//   useEffect(() => {
+//     fetchApprovedContracts();
+//     fetchFamilyMembers();
+//   }, []);
 
-  const addHeir = () => {
-    const newId = heirsList.length + 1;
-    const newHeir = {
-      id: newId,
-      name: "",
-      phone: "",
-      percent: 0,
-      relation: "اختر صلة القرابة",
-      nationalId: "",
-      fullName: ""
-    };
-    setHeirsList([...heirsList, newHeir]);
-  };
+//   const fetchApprovedContracts = async () => {
+//     try {
+//       const res = await API.get('/contracts/my-contracts');
+//       const approved = (res.data.contracts || []).filter(
+//         (c) => c.status === 'approved' || c.status === 'completed'
+//       );
+//       setApprovedContracts(approved);
+//       const total = approved.reduce((sum, c) => sum + (c.price || 0), 0);
+//       setTotalInheritanceValue(total);
+//     } catch (err) {
+//       console.error('Error fetching contracts:', err);
+//     } finally {
+//       setLoading(false);
+//     }
+//   };
 
+//   const fetchFamilyMembers = async () => {
+//     try {
+//       const userStr = localStorage.getItem('user');
+//       if (!userStr) return;
+//       const user = JSON.parse(userStr);
+//       const userId = user.id || user._id;
+//       const response = await API.get(`/inheritance/family-tree/${userId}`);
+//       if (response.data.success && response.data.tree) {
+//         const tree = response.data.tree;
+//         const members = [];
 
-  const removeHeir = (id) => {
-    if (heirsList.length > 1) {
-      setHeirsList(heirsList.filter(heir => heir.id !== id));
-    }
-  };
+//         // جمع أفراد العائلة في قائمة مسطحة
+//         tree.spouse?.forEach(sp => members.push({
+//           nationalId: sp.nationalId,
+//           fullName: sp.fullName,
+//           relationType: sp.relationType,
+//           relationArabic: sp.relationType === 'wife' ? 'زوجة' : 'زوج'
+//         }));
+//         tree.parents?.forEach(p => members.push({
+//           nationalId: p.nationalId,
+//           fullName: p.fullName,
+//           relationType: p.relationType,
+//           relationArabic: p.relationType === 'father' ? 'أب' : 'أم'
+//         }));
+//         tree.children?.forEach(c => members.push({
+//           nationalId: c.nationalId,
+//           fullName: c.fullName,
+//           relationType: c.relationType,
+//           relationArabic: c.relationType === 'son' ? 'ابن' : 'ابنة'
+//         }));
+//         tree.siblings?.forEach(s => members.push({
+//           nationalId: s.nationalId,
+//           fullName: s.fullName,
+//           relationType: s.relationType,
+//           relationArabic: s.relationType === 'brother' ? 'أخ' : 'أخت'
+//         }));
 
+//         setFamilyMembers(members);
+//       }
+//     } catch (err) {
+//       console.error('Error fetching family members:', err);
+//       setError('حدث خطأ في تحميل أفراد العائلة. يرجى التأكد من إضافة أفراد العائلة أولاً.');
+//     }
+//   };
 
-  const updateHeir = (id, field, value) => {
-    setHeirsList(heirsList.map(heir =>
-      heir.id === id ? { ...heir, [field]: value } : heir
-    ));
-  };
+//   const toggleContractSelection = (contract) => {
+//     setSelectedContracts(prev => {
+//       const exists = prev.find(c => c._id === contract._id);
+//       if (exists) {
+//         return prev.filter(c => c._id !== contract._id);
+//       } else {
+//         return [...prev, contract];
+//       }
+//     });
+//   };
 
-  return (
-    <div className="min-h-screen bg-gray-100 px-4 py-6">
-      <div className="max-w-5xl mx-auto bg-white rounded-lg shadow">
+//   const validate = () => {
+//     if (selectedContracts.length === 0) {
+//       setError('يرجى اختيار عقار واحد على الأقل');
+//       return false;
+//     }
+//     if (!selectedHeir) {
+//       setError('يرجى اختيار وريث من أفراد العائلة');
+//       return false;
+//     }
+//     const percentValue = parseFloat(percent);
+//     if (isNaN(percentValue) || percentValue <= 0 || percentValue > 33.33) {
+//       setError('النسبة يجب أن تكون أكبر من 0 ولا تتجاوز 33.33%');
+//       return false;
+//     }
+//     return true;
+//   };
 
-        <div className="bg-blue-900 text-white p-4 rounded-t-lg text-center">
-          <h2 className="text-xl font-semibold">الوصية الاختيارية</h2>
-          <p className="text-lg mt-1">
-            قم بتحديد كيفية توزيع الميراث على الورثة
-          </p>
-        </div>
+//   const handleSubmit = async (e) => {
+//     e.preventDefault();
+//     if (!validate()) return;
 
-        <div dir="rtl" className="p-4 border-b text-lg text-gray-700 text-right rounded-lg bg-gray-50 mt-3">
-          تسمح لك بتخصيص نسبة إضافية لغير الورثة في حدود الثلث.
-          <br />
-          <br />
+//     // العثور على الوريث المختار
+//     const heir = familyMembers.find(m => m.nationalId === selectedHeir);
+//     if (!heir) {
+//       setError('الوريث غير موجود في العائلة');
+//       return;
+//     }
 
-          <span className="font-semibold ">
-            لا تقبل الوصية إذا تجاوزت نسبة 33.33%
-          </span>
-          <br />
-          <br />
-        </div>
+//     setSaving(true);
+//     try {
+//       const willData = {
+//         religion: 'muslim',
+//         distributionMethod: 'optional',
+//         selectedProperties: selectedContracts.map(c => ({
+//           contractId: c._id,
+//           propertyNumber: c.propertyNumber,
+//           propertyType: c.propertyType,
+//           ownershipPercentage: c.ownershipPercentage,
+//           includeInWill: true
+//         })),
+//         heirs: [{
+//           fullName: heir.fullName,
+//           nationalId: heir.nationalId,
+//           relationType: heir.relationType,
+//           share: parseFloat(percent) / 100,
+//           shareType: 'percentage'
+//         }]
+//       };
+//       await API.post('/inheritance/will', willData);
+//       alert('تم حفظ الوصية الاختيارية بنجاح');
+//       navigate('/my-wills');
+//     } catch (err) {
+//       console.error('Error saving optional will:', err);
+//       alert('حدث خطأ في حفظ الوصية');
+//     } finally {
+//       setSaving(false);
+//     }
+//   };
 
-        <div className="p-4">
-          <div className="flex items-center justify-end gap-2 mb-4 text-blue-700 font-semibold">
-            <span className="text-2xl">إضافة وريث</span>
-          </div>
+//   if (loading) {
+//     return (
+//       <div className="min-h-screen bg-gray-100 flex items-center justify-center">
+//         <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-blue-900"></div>
+//       </div>
+//     );
+//   }
 
+//   return (
+//     <div className="min-h-screen bg-gray-100 py-8" dir="rtl">
+//       <div className="max-w-4xl mx-auto px-4">
+//         <div className="bg-white rounded-lg shadow p-6">
+//           <h2 className="text-2xl font-bold text-center text-blue-900 mb-4">وصية اختيارية</h2>
+//           <div className="bg-blue-50 border-r-4 border-blue-500 p-4 mb-6">
+//             <p className="text-gray-700">
+//               تسمح لك بتخصيص نسبة إضافية لأحد الورثة في حدود الثلث.
+//               <br />
+//               <span className="text-red-600 font-semibold">لا تقبل الوصية إذا تجاوزت نسبة 33.33%</span>
+//             </p>
+//           </div>
 
-          {heirsList.map((heir, index) => (
-            <div key={heir.id} className="mb-6 p-4  ">
+//           {error && (
+//             <div className="bg-red-100 border border-red-400 text-red-700 px-4 py-3 rounded mb-4">
+//               {error}
+//             </div>
+//           )}
 
-              {heirsList.length > 1 && (
-                <div className="flex justify-between items-center mb-3">
-                  <h3 className="text-lg font-semibold text-gray-700">
-                    وريث #{index + 1}
-                  </h3>
-                  <button type="button" onClick={() => removeHeir(heir.id)} className="bg-red-500 text-white px-3 py-1 rounded-md text-sm hover:bg-red-600" >
-                    حذف
-                  </button>
-                </div>
-              )}
+//           <form onSubmit={handleSubmit}>
+//             <h3 className="font-semibold text-lg mb-3">اختر العقار (يمكن اختيار أكثر من عقار)</h3>
+//             <div className="space-y-2 mb-6">
+//               {approvedContracts.length === 0 ? (
+//                 <p className="text-gray-500">لا يوجد عقارات مقبولة</p>
+//               ) : (
+//                 approvedContracts.map(contract => (
+//                   <div
+//                     key={contract._id}
+//                     onClick={() => toggleContractSelection(contract)}
+//                     className={`border rounded-lg p-3 cursor-pointer transition ${
+//                       selectedContracts.some(c => c._id === contract._id)
+//                         ? 'border-green-500 bg-green-50'
+//                         : 'hover:border-blue-300'
+//                     }`}
+//                   >
+//                     <div className="flex justify-between">
+//                       <div>
+//                         <p className="font-medium">{contract.propertyType} - {contract.area} م²</p>
+//                         <p className="text-sm text-gray-600">{contract.address}</p>
+//                       </div>
+//                       {selectedContracts.some(c => c._id === contract._id) && (
+//                         <span className="text-green-600 text-xl">✓</span>
+//                       )}
+//                     </div>
+//                   </div>
+//                 ))
+//               )}
+//             </div>
 
-              <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
-                <div>
-                  <label className="block text-right mb-1 text-sm font-medium text-gray-700">
-                    الرقم القومي
-                  </label>
-                  <input type="text" placeholder="أدخل الرقم القومي" className="border rounded-md px-3 py-2 text-right w-full" dir="rtl" value={heir.nationalId}  onChange={(e) => updateHeir(heir.id, 'nationalId', e.target.value)}/>
-                </div>
+//             <h3 className="font-semibold text-lg mb-3">اختر الوريث (واحد فقط)</h3>
+//             <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mb-6">
+//               <select
+//                 value={selectedHeir}
+//                 onChange={(e) => setSelectedHeir(e.target.value)}
+//                 className="border rounded-lg px-3 py-2"
+//                 required
+//               >
+//                 <option value="">اختر فرد العائلة</option>
+//                 {familyMembers.map(member => (
+//                   <option key={member.nationalId} value={member.nationalId}>
+//                     {member.fullName} - {member.relationArabic}
+//                   </option>
+//                 ))}
+//               </select>
+//               <input
+//                 type="number"
+//                 placeholder="النسبة المئوية (حد أقصى 33.33%)"
+//                 value={percent}
+//                 onChange={(e) => setPercent(e.target.value)}
+//                 step="0.01"
+//                 min="0"
+//                 max="33.33"
+//                 className="border rounded-lg px-3 py-2"
+//                 required
+//               />
+//             </div>
 
-                <div>
-                  <label className="block text-right mb-1 text-sm font-medium text-gray-700">
-                    رقم الهاتف
-                  </label>
-                  <input  type="tel" placeholder="أدخل رقم الهاتف" className="border rounded-md px-3 py-2 text-right w-full" dir="rtl" value={heir.phone}  onChange={(e) => updateHeir(heir.id, 'phone', e.target.value)}/>
-                </div>
-
-
-
-                <div>
-                  <label className="block text-right mb-1 text-sm font-medium text-gray-700">
-                    الاسم الكامل (رباعي)
-                  </label>
-                  <input  type="text" placeholder="أدخل الاسم الكامل" className="border rounded-md px-3 py-2 text-right w-full"  dir="rtl" value={heir.fullName} onChange={(e) => updateHeir(heir.id, 'fullName', e.target.value)} />
-                </div>
-
-                <div>
-                  <label className="block text-right mb-1 text-sm font-medium text-gray-700">
-                    النسبة (%)
-                  </label>
-                  <input type="number"  placeholder="أدخل النسبة"  className="border rounded-md px-3 py-2 text-right w-full"  dir="rtl" value={heir.percent} onChange={(e) => updateHeir(heir.id, 'percent', e.target.value)} />
-                </div>
-
-                <div>
-                  <label className="block text-right mb-1 text-sm font-medium text-gray-700">
-                    صلة القرابة
-                  </label>
-                  <select className="border rounded-md px-3 py-2 text-right w-full" dir="rtl" value={heir.relation} onChange={(e) => updateHeir(heir.id, 'relation', e.target.value)} >
-                    <option>اختر صلة القرابة</option>
-                    <option>ابن</option>
-                    <option>ابنة</option>
-                    <option>زوج</option>
-                    <option>زوجة</option>
-                    <option>أخ</option>
-                  </select>
-                </div>
-              </div>
-            </div>
-          ))}
-
-
-          <button type="button" onClick={addHeir} className="mt-4 w-full bg-green-600 text-white py-2 rounded-md hover:bg-green-700 transition cursor-pointer" >
-            + إضافة وريث جديد
-          </button>
-        </div>
-
-        <div className="p-4 border-t">
-          <h3 className="font-semibold mb-3 text-right">قائمة الورثة</h3>
-
-          {heirsList.map((heir, index) => (
-            <div key={index} className="flex items-center justify-between border rounded-md p-3 mb-2">
-              <div className="flex items-center gap-3">
-                <span className="text-sm font-semibold text-blue-700">
-                  %{heir.percent}
-                </span>
-              </div>
-              <div className="text-right">
-                <p className="font-semibold">{heir.name || heir.fullName || "بدون اسم"}</p>
-                <p className="text-sm text-gray-500">
-                  {heir.relation} — {heir.phone || "بدون رقم"}
-                </p>
-              </div>
-            </div>
-          ))}
-        </div>
-
-      </div>
-    </div>
-  );
-}
+//             <div className="flex gap-4">
+//               <button
+//                 type="button"
+//                 onClick={() => navigate(-1)}
+//                 className="flex-1 bg-gray-500 text-white py-2 rounded-lg hover:bg-gray-600"
+//               >
+//                 إلغاء
+//               </button>
+//               <button
+//                 type="submit"
+//                 disabled={saving}
+//                 className="flex-1 bg-blue-600 text-white py-2 rounded-lg hover:bg-blue-700 disabled:opacity-50"
+//               >
+//                 {saving ? 'جاري الحفظ...' : 'حفظ الوصية'}
+//               </button>
+//             </div>
+//           </form>
+//         </div>
+//       </div>
+//     </div>
+//   );
+// }
