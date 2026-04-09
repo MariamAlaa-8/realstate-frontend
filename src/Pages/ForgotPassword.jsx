@@ -20,11 +20,9 @@ export default function ForgotPassword() {
     const [successMessage, setSuccessMessage] = useState('')
     const [storedOtp, setStoredOtp] = useState('')
     
-    //Timer for delayed OTP chip display
-    const [showOtpChip, setShowOtpChip] = useState(false) // Initially hidden
+    const [showOtpChip, setShowOtpChip] = useState(false) 
     const [chipDisplayDelay, setChipDisplayDelay] = useState(0) // Delay timer
     
-    // Add refs for OTP inputs
     const otpInputsRef = useRef([])
 
     useEffect(() => {
@@ -38,13 +36,11 @@ export default function ForgotPassword() {
         }
     }, [timer])
 
-    // Timer for delayed chip display (step 2 only)
     useEffect(() => {
         if (step === 2 && storedOtp && chipDisplayDelay > 0) {
             const interval = setInterval(() => {
                 setChipDisplayDelay(prev => {
                     if (prev <= 1) {
-                        // When delay reaches 0, show the chip
                         setShowOtpChip(true)
                         setSuccessMessage('✅ رمز التحقق متاح الآن')
                         setTimeout(() => setSuccessMessage(''), 3000)
@@ -57,38 +53,32 @@ export default function ForgotPassword() {
         }
     }, [step, storedOtp, chipDisplayDelay])
 
-    // Function to handle OTP chip click
     const handleFillOtp = () => {
         if (!storedOtp || storedOtp.length !== 6) {
             setErrors(prev => ({ ...prev, otp: 'رمز OTP غير متوفر' }))
             return
         }
 
-        // Split OTP into individual digits
         const otpDigits = storedOtp.split('')
         setFormData(prev => ({
             ...prev,
             otp: otpDigits
         }))
         
-        // Focus on last input
         if (otpInputsRef.current[5]) {
             otpInputsRef.current[5].focus()
         }
         
-        // Show success message
         setSuccessMessage('تم تعبئة الرمز تلقائياً')
         setTimeout(() => setSuccessMessage(''), 2000)
     }
 
-    // Function to hide OTP chip
     const handleHideOtp = () => {
         setShowOtpChip(false)
         setSuccessMessage('تم إخفاء رمز التحقق')
         setTimeout(() => setSuccessMessage(''), 2000)
     }
 
-    // Function to handle individual OTP input changes
     const handleOtpChange = (index, value) => {
         if (value.length <= 1 && /^\d*$/.test(value)) {
             const newOtp = [...formData.otp]
@@ -98,14 +88,12 @@ export default function ForgotPassword() {
                 otp: newOtp
             }))
 
-            // Auto-focus next input
             if (value && index < 5 && otpInputsRef.current[index + 1]) {
                 otpInputsRef.current[index + 1].focus()
             }
         }
     }
 
-    // Handle keyboard events for OTP inputs
     const handleKeyDown = (index, e) => {
         if (e.key === 'Backspace' && !formData.otp[index] && index > 0) {
             const prevInput = otpInputsRef.current[index - 1]
@@ -129,7 +117,6 @@ export default function ForgotPassword() {
         }
     }
 
-    // Handle paste for OTP
     const handlePaste = (e) => {
         e.preventDefault()
         const pastedData = e.clipboardData.getData('text').trim()
@@ -173,7 +160,7 @@ export default function ForgotPassword() {
 
         if (!formData.phoneNumber.trim()) {
             newErrors.phoneNumber = 'يرجى إدخال رقم الهاتف'
-        } else if (!/^01[0-9]{9}$/.test(formData.phoneNumber)) {
+        } else if (!/^[0-9]{10,15}$/.test(formData.phoneNumber)) {
             newErrors.phoneNumber = 'رقم الهاتف غير صحيح'
         }
 
@@ -202,13 +189,11 @@ export default function ForgotPassword() {
             setTimer(300) // 5 دقائق
             setCanResend(false)
             
-            // Store the OTP from backend response if available
             if (response.data.otp) {
                 setStoredOtp(response.data.otp.toString())
                 console.log('✅ OTP for forgot password:', response.data.otp)
                 
-                // NEW: Start 15-second delay before showing chip
-                setShowOtpChip(false) // Ensure it's hidden initially
+                setShowOtpChip(false)
                 setChipDisplayDelay(15) // Start 15-second countdown
             }
             
@@ -231,7 +216,6 @@ export default function ForgotPassword() {
     const handleVerifyCode = async () => {
         const newErrors = {}
         
-        // Convert array OTP to string
         const otpCode = formData.otp.join('')
 
         if (!otpCode.trim()) {
@@ -288,11 +272,9 @@ export default function ForgotPassword() {
             setTimer(300)
             setCanResend(false)
             
-            // Update stored OTP with new one
             if (response.data.otp) {
                 setStoredOtp(response.data.otp.toString())
                 
-                //Reset chip display delay for new OTP
                 setShowOtpChip(false)
                 setChipDisplayDelay(15)
             }
@@ -365,7 +347,6 @@ export default function ForgotPassword() {
         setStep(prev => prev - 1)
         setErrors({})
         setSuccessMessage('')
-        //Reset chip display when going back
         setShowOtpChip(false)
         setChipDisplayDelay(0)
     }
