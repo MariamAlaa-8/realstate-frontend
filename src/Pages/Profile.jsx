@@ -79,7 +79,7 @@ export default function Profile() {
     }
 
     if (userData.phoneNumber.trim() && !/^[0-9]{10,15}$/.test(userData.phoneNumber.trim())) {
-      setMessage({ type: "error", text: "رقم الهاتف غير صحيح. يجب أن يحتوي على أرقام فقط (10-15 رقم)" });
+      setMessage({ type: "error", text: "رقم الهاتف غير صحيح." });
       return;
     }
 
@@ -233,6 +233,11 @@ export default function Profile() {
               className="text-gray-600 text-sm sm:text-base cursor-pointer hover:text-blue-600 transition"
               onClick={() => navigate('/transactions')} >
             معاملات
+            </p>
+              <p 
+              className="text-gray-600 text-sm sm:text-base cursor-pointer hover:text-blue-600 transition"
+              onClick={() => navigate('/my-wills')} >
+            الوصية
             </p>
             <p 
               className="text-gray-600 text-sm sm:text-base cursor-pointer hover:text-blue-600 transition"
