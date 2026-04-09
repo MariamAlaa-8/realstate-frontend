@@ -1,5 +1,5 @@
 import React from 'react'
-import { useNavigate } from 'react-router-dom'
+import { Link, useNavigate } from 'react-router-dom'
 import { useAuth } from '../contexts/AuthContext'  
 import whatsappImage from '../assets/whatsApp image.jpeg'
 
@@ -54,9 +54,13 @@ export default function Home() {
                     ابدأ الآن
                   </button>
 
-                  <button className="border border-white px-6 py-2 rounded w-full sm:w-auto hover:bg-white/10 transition">
-                    اعرف المزيد
-                  </button>
+                  
+<Link
+  to="/allServicesPage" 
+  className="border border-white px-6 py-2 rounded w-full sm:w-auto hover:bg-white/10 transition inline-block text-center"
+>
+  اعرف المزيد
+</Link>
                 </>
               )}
             </div>
