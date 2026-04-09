@@ -54,7 +54,7 @@ export default function Navbar() {
           <img
             src={Image}
             alt="لوجو النظام العقاري الذكي"
-            className="w-20 h-19 object-contain"
+            className="w-25 h-24 object-contain"
           />
           <span className="hidden md:inline">النظام العقاري الذكي</span>
         </Link>
