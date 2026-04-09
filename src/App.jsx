@@ -14,7 +14,7 @@ import ContractForm from './Pages/ContractFrom'
 import SendContract from './Pages/SendContract'
 import SecondPartyForm from './Pages/SecondPartyForm'
 import NotFound from './Pages/NotFound'
-import OptionalWill from './Pages/OptionalWill'
+// import OptionalWill from './Pages/OptionalWill'
 import Verification from './Pages/Verification'
 import RealEstate from './Pages/RealEstate'
 import PaymentPage from './Pages/PaymentPage'
@@ -24,8 +24,10 @@ import AdminRoute from './Components/AdminRoute'
 import AdminDashboard from './Pages/AdminDashboard' 
 import Notifications from './Pages/Notifications';
 import Transactions from './Pages/Transactions';
-import WillSetup from './Pages/WillSetup'
+// import WillSetup from './Pages/WillSetup'
 import WillMethod from './Pages/WillMethod'
+import MyWills from './Pages/MyWills'
+import AllServicesPage from './Pages/AllServicesPage'
 
 const router = createBrowserRouter([
   {
@@ -46,6 +48,10 @@ const router = createBrowserRouter([
         element: <ProtectedRoute><Requestrealestate /></ProtectedRoute> 
       },
       { 
+        path: 'allServicesPage', 
+        element: <ProtectedRoute><AllServicesPage /></ProtectedRoute> 
+      },
+      { 
         path: 'searchRealEstate', 
         element: <ProtectedRoute><SearchRealEstate /></ProtectedRoute> 
       },
@@ -61,14 +67,15 @@ const router = createBrowserRouter([
         path: 'secondPartyForm', 
         element: <ProtectedRoute><SecondPartyForm /></ProtectedRoute> 
       },
+      // { 
+      //   path: 'optionalWill', 
+      //   element: <ProtectedRoute><OptionalWill /></ProtectedRoute> 
+      // },
+      // { 
+      //   path: 'willSetup', 
+      //   element: <ProtectedRoute><WillSetup /></ProtectedRoute> 
+      // }, 
       { 
-        path: 'optionalWill', 
-        element: <ProtectedRoute><OptionalWill /></ProtectedRoute> 
-      },
-      { 
-        path: 'willSetup', 
-        element: <ProtectedRoute><WillSetup /></ProtectedRoute> 
-      }, { 
         path: 'willMethod', 
         element: <ProtectedRoute><WillMethod/></ProtectedRoute> 
       },
@@ -90,7 +97,10 @@ const router = createBrowserRouter([
         path: 'transactions', 
         element: <ProtectedRoute><Transactions /></ProtectedRoute> 
       },
-
+      { 
+        path: 'my-wills', 
+        element: <ProtectedRoute><MyWills /></ProtectedRoute> 
+      },
     ]
   },
   {
