@@ -123,9 +123,7 @@ export default function Navbar() {
           )}
 
          
-          <button className="border px-3 py-1 rounded hover:bg-white hover:text-blue-900 transition">
-            English | عربي
-          </button>
+        
         </div>
       </div>
 
