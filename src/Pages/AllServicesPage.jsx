@@ -2,6 +2,9 @@ import React, { useState } from "react";
 import proofVideo from "../assets/proofVideo.mp4";
 import searchVideo from "../assets/searchVideo.mp4";
 import registerVideo from "../assets/registerVideo.mp4";
+import ContractFormVideo from "../assets/ContractFormVideo.mp4";
+import WillMethodVideo from "../assets/WillMethodVideo.mp4";
+
 
 export default function AllServicesPage() {
   const [activeVideo, setActiveVideo] = useState(null);
@@ -28,13 +31,13 @@ export default function AllServicesPage() {
     {
       title: "بيع وشراء",
       description: "معلومات عن كيفية بيع وشراء العقارات بشكل آمن وموثق.",
-      videoSrc: null,
+      videoSrc: ContractFormVideo,
       color: "bg-pink-200",
     },
     {
       title: "المواريث",
       description: "شرح طريقة إدارة المواريث وتوزيع العقارات بين الورثة.",
-      videoSrc: null,
+      videoSrc: WillMethodVideo,
       color: "bg-purple-200",
     },
   ];
