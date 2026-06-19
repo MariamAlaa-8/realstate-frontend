@@ -49,7 +49,7 @@ const router = createBrowserRouter([
       },
       { 
         path: 'allServicesPage', 
-        element: <ProtectedRoute><AllServicesPage /></ProtectedRoute> 
+        element: <AllServicesPage />
       },
       { 
         path: 'searchRealEstate', 
